@@ -51,7 +51,6 @@ classdef wave
                 case wave_types.plane_wave
                     w.theta_az = deg2rad(linspace(theta_min, theta_max, N_theta));
                     w.N_theta = length(w.theta_az);
-                    
             end
         end
     end
