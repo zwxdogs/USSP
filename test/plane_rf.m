@@ -1,8 +1,10 @@
 clear;
 clc;
 close all;
+
+para = global_para(100e6, 1500);
 % 探头
-rca = rca_array(64, 0.3e-3, 0.03e-3, 4e6);
+rca = rca_array(para, 64, 0.3e-3, 0.03e-3, 4e6);
 rca.is_RC = false;
 % 脉冲
 pulse = pulse(rca);

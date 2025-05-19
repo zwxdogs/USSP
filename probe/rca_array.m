@@ -13,13 +13,13 @@ classdef rca_array < probe
 
     % constructor
     methods
-        function rca = rca_array(N_RC, pitch, kerf, f0)
+        function rca = rca_array(para, N_RC, pitch, kerf, f0)
             % probe参数
             N_el = N_RC * 2;
             el_width = pitch - kerf;
             el_height = (pitch * N_RC - kerf) + ...
                 (pitch * N_RC - kerf) / 3; % 加上滚降区域
-            rca = rca@probe(N_el, el_width, el_height, f0);
+            rca = rca@probe(para, N_el, el_width, el_height, f0);
             rca.probe_type = probe_types.rca_array;
 
             % rca参数
