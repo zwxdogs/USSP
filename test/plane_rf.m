@@ -21,21 +21,18 @@ point_amplitudes = ones(size(point_position, 1), 1);
 pha = phantom();
 pha = pha.pha_pos(point_position, point_amplitudes);
 % 波角度
-w = rca_pw(-5, 5, 11);
+wave = rca_pw(-5, 5, 11);
 % 模拟
-simu = simu_us(rca, pulse, w, 1500, 1.45e6);
-simu = simu.calc_rf(pha);
-sca = linear_3d_scan(linspace(-5e-3, 5e-3, 200), linspace(0, 30e-3, 600), 0);
+simu_data = rf_rca_simu(rca, para, wave, pha);
+sca = linear_3d_scan(linspace(-5e-3, 5e-3, 200), linspace(0, 30e-3, 600), 90);
 % sca = linear_xy_scan(linspace(-5e-3, 5e-3, 201), linspace(-5e-3, 5e-3, 201), 15e-3);
 % 波束成形
-beam = beamformed(w, sca, simu.rf_data, simu.delay_t);
-beam = beam.calc(rca);
+b_data = das_rca(simu_data, rca, para, wave, sca);
 % 复合
-comp = compounded();
-comp = comp.wave_compounded(beam.beamformed_data, sca);
+comp_data = wave_compounded(b_data, sca);
 % 绘图
 figure_1 = figure(1);
 % subplot(121);
-sca.plot_b_mode(figure_1, comp.compounded_data, [-60, 0], 'gray');
+sca.plot_b_mode(figure_1, comp_data, [-60, 0], 'gray');
 
 % test_ToF;
