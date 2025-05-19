@@ -19,6 +19,7 @@ classdef probe
     properties (Access = public)
         f0                  % 中心频率
         bw = 1              % 带宽
+        para                % 全局参数
     end
     % 探头脉冲响应和激励
     properties (Access = public)
@@ -36,15 +37,16 @@ classdef probe
 
     % constructor
     methods
-        function probe = probe(N_el, el_width, el_height, f0)
+        function probe = probe(para, N_el, el_width, el_height, f0)
             probe.N_el = N_el;
             probe.el_width = el_width;
             probe.el_height = el_height;
             probe.f0 = f0;
+            probe.para = para;
             probe = probe.calc_pulse();
         end
         function probe = calc_pulse(probe)
-            dt = 1 / probe.fs;
+            dt = 1 / probe.para.fs;
             % 计算脉冲响应
             switch probe.impulse_type
                 case impulse_types.gauspuls
@@ -53,7 +55,7 @@ classdef probe
                     impul_res = impul_res - mean(impul_res);
                     probe.impulse_respond = impul_res;
                 case impulse_types.sin
-                    disp('暂时不明白正弦脉冲响应的代码是否正确！');
+                    % % 暂时不明白正弦脉冲响应的代码是否正确！
                     % t0 = (-(pul.pulse_duration/2)/pul.f0) : dt : ((pul.pulse_duration/2)/pul.f0);
                     % impul_res = sin(2*pi*pul.f0*t0);
                     % impul_res = impul_res .* hanning(max(size(impul_res)))';
@@ -100,9 +102,23 @@ classdef probe
         end
         function probe = set.impulse_type(probe, impulse_type)
             probe.impulse_type = impulse_type;
+            probe = probe.calc_pulse();
         end
         function probe = set.pulse_duration(probe, pulse_duration)
             probe.pulse_duration = pulse_duration;
+            probe = probe.calc_pulse();
+        end
+        function probe = set.excitation_type(probe, excitation_type)
+            probe.excitation_type = excitation_type;
+            probe = probe.calc_pulse();
+        end
+        function probe = set.excitation_duration(probe, excitation_duration)
+            probe.excitation_duration = excitation_duration;
+            probe = probe.calc_pulse();
+        end
+        function probe = set.excitation_apo(probe, excitation_apo)
+            probe.excitation_apo = excitation_apo;
+            probe = probe.calc_pulse();
         end
     end
 
