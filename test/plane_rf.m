@@ -2,13 +2,10 @@ clear;
 clc;
 close all;
 
-para = global_para(100e6, 1500);
+para = global_para(100e6, 1500, 1.45e6);
 % 探头
 rca = rca_array(para, 64, 0.3e-3, 0.03e-3, 4e6);
 rca.is_RC = false;
-% 脉冲
-pulse = pulse(rca);
-pulse.excitation_type = "square";
 % 散射体
 point_position(1, :) = [0, 0, 15e-3];
 point_position(2, :) = [0, 0, 10e-3];
@@ -24,9 +21,7 @@ point_amplitudes = ones(size(point_position, 1), 1);
 pha = phantom();
 pha = pha.pha_pos(point_position, point_amplitudes);
 % 波角度
-w = wave(rca, pulse, 1500);
-w.wave_type = "plane_wave";
-w = w.rca_wave(-5, 5, 11, -10e-3);
+w = rca_pw(-5, 5, 11);
 % 模拟
 simu = simu_us(rca, pulse, w, 1500, 1.45e6);
 simu = simu.calc_rf(pha);
