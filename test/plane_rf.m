@@ -23,11 +23,12 @@ pha = pha.pha_pos(point_position, point_amplitudes);
 % 波角度
 wave = rca_pw(-5, 5, 11);
 % 模拟
-simu_data = rf_rca_simu(rca, para, wave, pha);
+simu_data = rca.calc_rf(para, wave, pha);
 sca = linear_3d_scan(linspace(-5e-3, 5e-3, 200), linspace(0, 30e-3, 600), 90);
 % sca = linear_xy_scan(linspace(-5e-3, 5e-3, 201), linspace(-5e-3, 5e-3, 201), 15e-3);
 % 波束成形
-b_data = das_rca(simu_data, rca, para, wave, sca);
+b_data = rca.das(simu_data, para, wave, sca);
+% b_data = das_rca(simu_data, rca, para, wave, sca);
 % 复合
 comp_data = wave_compounded(b_data, sca);
 % 绘图

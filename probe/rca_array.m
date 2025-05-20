@@ -76,4 +76,21 @@ classdef rca_array < probe
             rca.is_RC = is_RC;
         end
     end
+
+    % simulation
+    methods
+        function I_field = calc_I(rca, wave, global_para, scan)
+            I_field = I_rca_simu(rca, wave, global_para, scan);
+        end
+        function simu_data = calc_rf(rca, global_para, wave, phantom)
+            simu_data = rf_rca_simu(rca, global_para, wave, phantom);
+        end
+    end
+
+    % post_process
+    methods
+        function beamformed_data = das(rca, simu_data, global_para, wave, scan)
+            beamformed_data = das_rca(simu_data, rca, global_para, wave, scan);
+        end
+    end
 end
