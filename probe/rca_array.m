@@ -83,7 +83,9 @@ classdef rca_array < probe
             I_field = I_rca_simu(rca, wave, global_para, scan);
         end
         function simu_data = calc_rf(rca, global_para, wave, phantom)
-            simu_data = rf_rca_simu(rca, global_para, wave, phantom);
+            data = rf_rca_simu(rca, global_para, wave, phantom);
+            iq_data = rf2iq(data, rca, global_para);
+            simu_data = iq_data;
         end
     end
 

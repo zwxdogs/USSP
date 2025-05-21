@@ -38,7 +38,13 @@ classdef linear_3d_scan < scan
                 color = 'gray';
             end
             % b-mode绘图
-            envelope = abs(hilbert(data));
+            is_iq = ~isreal(data);
+            if is_iq
+                envelope = abs(data);
+            else
+                envelope = abs(hilbert(data));
+            end
+            
             envelope = db(envelope./max(envelope(:)));
             b_mode_figure = figure_handle;
             imagesc(sca_3d.lateral_grid*1000, sca_3d.axial_grid*1000, envelope);

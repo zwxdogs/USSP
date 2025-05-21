@@ -114,7 +114,7 @@ for n = 1:wave.N_theta
     delay_times(n) = -rca_probe.lag * dt + t;
 end
 % rf_temp = rf_temp ./ max(rf_temp(:));
-simu_data.rf_data = rf_temp;
+simu_data.data = rf_temp;
 simu_data.delay_t = delay_times;
 
 field_end();
