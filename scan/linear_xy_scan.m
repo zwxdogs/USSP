@@ -37,7 +37,13 @@ classdef linear_xy_scan < scan
                 color = 'gray';
             end
             % b-mode绘图
-            envelope = abs(hilbert(data));
+            is_iq = ~isreal(data);
+            if is_iq
+                envelope = abs(data);
+            else
+                envelope = abs(hilbert(data));
+            end
+            
             envelope = db(envelope./max(envelope(:)));
             b_mode_figure = figure_handle;
             imagesc(sca_xy.x_grid*1000, sca_xy.y_grid*1000, envelope);

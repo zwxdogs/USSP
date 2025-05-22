@@ -10,18 +10,18 @@ apo_channel = apodization(rca_probe.N_RC);
 apo_channel.apodization_type = 'hanning';
 
 disp('开始波束合成');
-ToF = zeros(length(scan.scan_x), rca_probe.N_RC, wave.N_theta);
+ToF = calc_ToF_rca(wave, rca_probe, simu_data.delay_t, scan, global_para.c0);
 for n = 1:wave.N_theta
     disp(['合成第', num2str(n), '个波束（一共', num2str(wave.N_theta), '个）']);
     for c = 1:rca_probe.N_RC
 
         data = simu_data.data(:, c, n);
         % ToF计算
-        ToF(:, c, n) = calc_ToF_rca(wave, rca_probe, simu_data.delay_t, scan, n, c, global_para.c0);
+        ToF_this = ToF(:, c, n);
         % 波束成形插值
-        temp = interp1(channel_times, data, ToF(:, c, n), 'spline', 0);
+        temp = interp1(channel_times, data, ToF_this, 'spline', 0);
         if is_iq
-            phase_rotate = is_iq * exp(1i*2*pi*rca_probe.f0*ToF(:, c, n));
+            phase_rotate = is_iq * exp(1i*2*pi*rca_probe.f0*ToF_this);
             temp_apo = apo_channel.apodization_data(c) .* temp;
             b_data(:, n) = b_data(:, n) + temp_apo .* phase_rotate;
         else
