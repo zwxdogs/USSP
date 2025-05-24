@@ -1,34 +1,18 @@
-clear;
-clc;
-close all;
+clear;clc;close all;
 
-para = global_para(100e6, 1500, 1.45e6);
+para = global_para(100e6, 1500, 1.45e6, 2e3);
 % 探头
 rca = rca_array(para, 64, 0.3e-3, 0.03e-3, 4e6);
 rca.is_RC = false;
-% 散射体
-point_position(1, :) = [0, 0, 15e-3];
-point_position(2, :) = [0, 0, 10e-3];
-point_position(3, :) = [-3e-3, 0, 12e-3];
-point_position(4, :) = [3e-3, 0, 12e-3];
-point_position(5, :) = [0, 0, 20e-3];
-point_amplitudes = ones(size(point_position, 1), 1);
-pha = phantom();
-pha = pha.pha_pos(point_position, point_amplitudes);
+% 流动散射体
+pha = mk_circle_pha(5000, 8e-3, [0, 0, 25e-3], 0.1, 10, para);
 % 波角度
-wave = rca_pw(-5, 5, 11);
+wave = rca_pw(0, 0, 1);
+% 扫描区域
+sca = linear_3d_scan(linspace(-10e-3, 10e-3, 600), linspace(0, 40e-3, 600), 0);
 % 模拟
-simu_data = rca.calc_rf(para, wave, pha);
-sca = linear_3d_scan(linspace(-5e-3, 5e-3, 100), linspace(0, 25e-3, 200), 90);
-% sca = linear_xy_scan(linspace(-5e-3, 5e-3, 200), linspace(-5e-3, 5e-3, 200), 15e-3);
-% 波束成形
-b_data = rca.das(simu_data, para, wave, sca);
-% 复合
-comp_data = wave_compounded(b_data, sca);
-% comp_data = abs(comp_data);
-% 绘图
+velocity_data = rca.calc_doppler(para, wave, pha, sca, 1, [1, 1]);
+% 绘制
 figure_1 = figure(1);
-% subplot(121);
-sca.plot_b_mode(figure_1, comp_data, [-60, 0], 'gray');
+sca.plot_doppler(figure_1, velocity_data, -80);
 
-% test_ToF;

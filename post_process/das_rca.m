@@ -1,4 +1,4 @@
-function beamformed_data = das_rca(simu_data, rca_probe, global_para, wave, scan)
+function beamformed_data = das_rca(simu_data, rca_probe, global_para, wave, scan, ToF)
 
 is_iq = ~isreal(simu_data.data);
 b_data = zeros(length(scan.scan_x), wave.N_theta);
@@ -10,7 +10,6 @@ apo_channel = apodization(rca_probe.N_RC);
 apo_channel.apodization_type = 'hanning';
 
 disp('开始波束合成');
-ToF = calc_ToF_rca(wave, rca_probe, simu_data.delay_t, scan, global_para.c0);
 for n = 1:wave.N_theta
     disp(['合成第', num2str(n), '个波束（一共', num2str(wave.N_theta), '个）']);
     for c = 1:rca_probe.N_RC

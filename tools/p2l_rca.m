@@ -21,18 +21,4 @@ for i = 1:length(proj_norm)
 end
 
 distance = distance';
-
-% proj = dot(point-line_p_min, line_p_max-line_p_min) / ...
-%     norm(line_p_max-line_p_min);
-% proj_norm = proj / norm(line_p_max-line_p_min);
-% 
-% if proj_norm < 0
-%     distance = norm(point-line_p_min);
-% elseif proj_norm > 1
-%     distance = norm(point-line_p_max);
-% else
-%     distance = norm(cross(line_p_max-line_p_min, point-line_p_min)) / ...
-%         norm(line_p_max-line_p_min);
-% end
-
 end

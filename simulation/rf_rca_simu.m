@@ -1,6 +1,6 @@
 function simu_data = rf_rca_simu(rca_probe, global_para, wave, phantom)
 
-field_init(0);
+field_init(-1);
 set_field('c', global_para.c0);
 set_field('fs', global_para.fs);
 % 采用Field_ii进行模拟
@@ -97,7 +97,7 @@ rf_temp = zeros(cropat, rca_probe.N_RC, wave.N_theta); % 数据预分配空间�
 delay_times = zeros(wave.N_theta, 1);
 
 % 计算
-disp('计算rf_temp原始数据');
+disp('计算RF数据');
 for n = 1:wave.N_theta
     disp(['计算第', num2str(n), '个角度（一共', num2str(wave.N_theta), '个）']);
 

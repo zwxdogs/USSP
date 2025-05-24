@@ -10,14 +10,14 @@ switch wave.type
                 wave.source_p_min, wave.source_p_max);
         end
         transmit = source2point - ori2source;
-    % case wave_types.plane_wave
-    %     if rca_probe.is_RC
-    %         transmit = scan.scan_z * cos(wave.theta(wave_index)) + ...
-    %             scan.scan_x * sin(wave.theta(wave_index));
-    %     else
-    %         transmit = scan.scan_z * cos(wave.theta(wave_index)) + ...
-    %             scan.scan_y * sin(wave.theta(wave_index));
-    %     end
+    case wave_types.plane_wave
+        if rca_probe.is_RC
+            transmit = scan.scan_z * cos(wave.theta) + ...
+                scan.scan_x * sin(wave.theta);
+        else
+            transmit = scan.scan_z * cos(wave.theta) + ...
+                scan.scan_y * sin(wave.theta);
+        end
 end
 % 接收延迟
 if rca_probe.is_RC
