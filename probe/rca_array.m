@@ -95,14 +95,14 @@ classdef rca_array < probe
             ToF = calc_ToF_rca(wave, rca, simu_data.delay_t, scan, global_para.c0);
             beamformed_data = das_rca(simu_data, rca, global_para, wave, scan, ToF);
         end
-        function velocity_data = calc_doppler(rca, global_para, wave, phatom, scan, lag, M)
-            N_frame = length(phatom);
-            iq_data = zeros(scan.ori_shape(1), scan.ori_shape(2), N_frame);
+        function velocity_data = calc_color_doppler(rca, global_para, wave, phantom, scan, lag, M)
+            N_frame = length(phantom);
+            iq_b_data = zeros(scan.ori_shape(1), scan.ori_shape(2), N_frame);
             disp('计算多帧数据');
             disp('---------------------------------------------');
             for n = 1:N_frame
                 disp(['计算第', num2str(n), '帧的数据（一共', num2str(N_frame), '帧）']);
-                pha = phatom{n};
+                pha = phantom{n};
                 simu_data = rca.calc_rf(global_para, wave, pha);
                 if(~exist('ToF_tr', 'var'))
                     ToF_tr = calc_ToF_rca(wave, rca, simu_data.delay_t, scan, global_para.c0) + simu_data.delay_t;
@@ -111,11 +111,14 @@ classdef rca_array < probe
                 % ToF = calc_ToF_rca(wave, rca, simu_data.delay_t, scan, global_para.c0);
                 beamformed_data = das_rca(simu_data, rca, global_para, wave, scan, ToF);
                 comp_data = wave_compounded(beamformed_data, scan);
-                iq_data(:, :, n) = comp_data;
+                iq_b_data(:, :, n) = comp_data;
                 disp('---------------------------------------------');
             end
-            velocity_data = iq2doppler(iq_data, global_para, rca, lag, M);
-            velocity_data.doppler_data = iq_data;
+            velocity_data = iq2doppler(iq_b_data, global_para, rca, lag, M);
+            velocity_data.doppler_data = iq_b_data;
         end
+        % function velocity_data = calc_velocity(rca, global_para, wave, phatom, scan, lag, M)
+        % 
+        % end
     end
 end

@@ -15,7 +15,7 @@ for i = 1:length(proj_norm)
     elseif proj_norm(i) > 1
         distance(i) = norm(point_mat(i, :)-line_p_max(i, :));
     else
-        distance(i) = norm(cross(line_p_max(i, :)-line_p_min(i, :), point_mat(i, :)-line_p_min(i, :))) / ...
+        distance(i) = norm(cross(line_p_max(i, :)-line_p_min(i, :), point_mat(i, :)-line_p_min(i, :))) ./ ...
             norm(line_p_max(i, :)-line_p_min(i, :));
     end
 end

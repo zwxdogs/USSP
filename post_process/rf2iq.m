@@ -7,8 +7,9 @@ rf_data = simu_data.data;
 t_v = (0:size(rf_data, 1)-1)' / global_para.fs;
 % 下混频
 iq_temp = rf_data .* exp(-1i*2*pi*probe.f0*t_v);
+
 % Wn为归一化截止频率，为截止频率*2/采样频率
-Wn = (probe.bw * probe.f0) / (global_para.fs / 2);
+Wn = probe.bw * probe.f0 / global_para.fs;
 % 低通滤波
 [b, a] = butter(5, Wn);
 iq_temp = filtfilt(b, a, iq_temp)*2;
@@ -17,4 +18,3 @@ iq_data.data = iq_temp;
 iq_data.delay_t = simu_data.delay_t;
 
 end
-

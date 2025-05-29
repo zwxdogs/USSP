@@ -18,7 +18,7 @@ classdef probe
     end
     properties (Access = public)
         f0                  % 中心频率
-        bw = 1              % 带宽
+        bw = 0.5              % 带宽
         para                % 全局参数
     end
     % 探头脉冲响应和激励
@@ -99,6 +99,7 @@ classdef probe
         end
         function probe = set.bw(probe, bw)
             probe.bw = bw;
+            probe = probe.calc_pulse();
         end
         function probe = set.impulse_type(probe, impulse_type)
             probe.impulse_type = impulse_type;

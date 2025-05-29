@@ -22,6 +22,7 @@ if ~isequal([M(1), M(2)], [1, 1])
 end
 velocity_data.variance = 2 * (global_para.c0 * global_para.PRF / (4 * probe.f0 * lag * pi))^2 ...
     * (1 - abs(AC) ./ P);
+
 % 功率多普勒计算
 P_db = 20*log10(P/max(P(:)));
 velocity_data.P_db = P_db;

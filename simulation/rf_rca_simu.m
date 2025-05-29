@@ -96,6 +96,9 @@ cropat = round(2*max_deepth/global_para.c0/dt); % 最大时间采样点数，超
 rf_temp = zeros(cropat, rca_probe.N_RC, wave.N_theta); % 数据预分配空间（数据、通道、波）
 delay_times = zeros(wave.N_theta, 1);
 
+% 发射变迹
+trans_apo = apodization(rca_probe.N_RC);
+trans_apo.apodization_type = 'hanning';
 % 计算
 disp('计算RF数据');
 for n = 1:wave.N_theta
@@ -103,7 +106,8 @@ for n = 1:wave.N_theta
 
     % 发射孔径
     emit_delay = delay_calc_rca(Th_x_ele, Th_y_ele, wave, global_para.c0, n, rca_probe);
-    xdc_apodization(Th, 0, ones(1, rca_probe.N_RC)); % 发射不变迹
+    % xdc_apodization(Th, 0, ones(1, rca_probe.N_RC)); % 发射不变迹
+    xdc_apodization(Th, 0, trans_apo.apodization_data');
     xdc_times_focus(Th, 0, emit_delay);
     % 接收孔径
     xdc_apodization(Rh, 0, ones(1, rca_probe.N_RC)); % 接收不变迹
@@ -117,6 +121,8 @@ end
 simu_data.data = rf_temp;
 simu_data.delay_t = delay_times;
 
+xdc_free(Th);
+xdc_free(Rh);
 field_end();
 
 end

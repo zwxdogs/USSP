@@ -51,7 +51,7 @@ classdef linear_3d_scan < scan
             colormap(color);
             axis image;
             colorbar;
-            caxis(range_db);
+            clim(range_db);
         
             title('B-mode');
             xlabel('lateral (mm)');
@@ -64,7 +64,7 @@ classdef linear_3d_scan < scan
             colormap('hot');
             axis image;
             colorbar;
-            caxis(range_db);
+            clim(range_db);
         
             title('Pressure');
             xlabel('lateral (mm)');
