@@ -9,9 +9,9 @@ channel_times = (0:size(simu_data.data, 1) - 1) * dt;
 apo_channel = apodization(rca_probe.N_RC);
 apo_channel.apodization_type = 'hanning';
 
-disp('开始波束合成');
+% disp('开始波束合成');
 for n = 1:wave.N_theta
-    disp(['合成第', num2str(n), '个波束（一共', num2str(wave.N_theta), '个）']);
+    % disp(['合成第', num2str(n), '个波束（一共', num2str(wave.N_theta), '个）']);
     for c = 1:rca_probe.N_RC
 
         data = simu_data.data(:, c, n);

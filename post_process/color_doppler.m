@@ -1,4 +1,4 @@
-function velocity_data = iq2doppler(doppler_data, global_para, probe, lag, M)
+function velocity_data = color_doppler(doppler_data, global_para, probe, lag, M)
 % iq数据转换为doppler数据
 % M窗口越大分辨率越低，信噪比越高。
 % lag为自相关滞后值

@@ -1,60 +1,49 @@
 clear;clc;close all;
 
-para = global_para(100e6, 1500, 1.45e6, 20e3);
+para = global_para(100e6, 1500, 1.45e6, 3e3);
 % 探头
-rca = rca_array(para, 64, 0.2e-3, 0.02e-3, 6.25e6);
-% rca.is_RC = false;
+rca = rca_array(para, 128, 0.3e-3, 0.03e-3, 5e6);
 rca.bw = 0.6;
 % 流动散射体
-pha = mk_circle_pha_xy(100, 8e-3, [0, 0, 15e-3], 0.1, 8, para);
-figure_1 = figure(1);
-pha{1}.plot_pha(figure_1);
+pha = mk_line_pha(500, 0.1, 8, para);
+% figure_1 = figure(1);
+% pha{1}.plot_pha(figure_1);
 % 波角度
-wave = rca_pw(-10, 10, 21);
+wave = rca_pw(-5, 5, 11);
 % 扫描区域
-% sca = linear_3d_scan(linspace(-10e-3, 10e-3, 600), linspace(0, 40e-3, 600), 0);
-sca = linear_xy_scan(linspace(-10e-3, 10e-3, 600), linspace(-10e-3, 10e-3, 600), 15e-3);
+sca = linear_3d_scan(linspace(-10e-3, 10e-3, 200), linspace(0e-3, 40e-3, 200), 0);
+% sca = linear_xy_scan(linspace(-10e-3, 10e-3, 600), linspace(-10e-3, 10e-3, 600), 15e-3);
 % 模拟
-p_doppler_data = calc_p_doppler(rca, para, wave, pha, sca, 0, 10);
+velocity_data = rca.calc_velocity(para, wave, pha, sca, 1, [1, 1], -30);
 % 绘制
 % figure_1 = figure(1);
-% sca.plot_doppler(figure_1, velocity_data, -80);
 
-subplot(131);
-p_doppler = sum(p_doppler_data.iq_b_data_RC .* conj(p_doppler_data.iq_b_data_CR) + conj(p_doppler_data.iq_b_data_RC) .* p_doppler_data.iq_b_data_CR, 3) / 8;
-p_doppler = abs(p_doppler);
-p_doppler_data.P_db = 20*log10(p_doppler/max(p_doppler(:)));
-imagesc(sca.x_grid*1000, sca.y_grid*1000, p_doppler_data.P_db);
-clim([-80, 0])
-colorbar;
-colormap('hot');
-axis equal ij tight
-title('XDoppler');
-xlabel('lateral (mm)');
-ylabel('depth (mm)');
+sample = 10;
+[lateral, axial] = meshgrid(sca.lateral_grid(1:sample:end), sca.axial_grid(1:sample:end));
+subplot(121);
+plot_quiver(lateral*1000, axial*1000, velocity_data.V_data_mbp.v_x((1:sample:end), (1:sample:end)), ...
+    velocity_data.V_data_mbp.v_z_RC((1:sample:end), (1:sample:end)));
+% quiver(lateral*1000, axial*1000, velocity_data.V_data.RC((1:sample:end), (1:sample:end), 2), ...
+%     velocity_data.V_data.RC((1:sample:end), (1:sample:end), 1), 2)
+% axis equal ij tight
+% xlabel('lateral (mm)');
+% ylabel('depth (mm)');
+subplot(122);
+plot_quiver(lateral*1000, axial*1000, velocity_data.V_data_mbp.v_y((1:sample:end), (1:sample:end)), ...
+    velocity_data.V_data_mbp.v_z_CR((1:sample:end), (1:sample:end)));
+% quiver(lateral*1000, axial*1000, velocity_data.V_data.CR((1:sample:end), (1:sample:end), 2), ...
+%     velocity_data.V_data.CR((1:sample:end), (1:sample:end), 1), 2)
+% axis equal ij tight
+% xlabel('lateral (mm)');
+% ylabel('depth (mm)');
 
-subplot(132);
-p_doppler = sum(abs(p_doppler_data.iq_b_data_RC  + p_doppler_data.iq_b_data_CR).^2, 3) / 8;
-p_doppler = abs(p_doppler);
-p_doppler_data.P_db = 20*log10(p_doppler/max(p_doppler(:)));
-imagesc(sca.x_grid*1000, sca.y_grid*1000, p_doppler_data.P_db);
-clim([-80, 0])
-colorbar;
-colormap('hot');
-axis equal ij tight
-title('OPW');
-xlabel('lateral (mm)');
-ylabel('depth (mm)');
-
-subplot(133);
-p_doppler_2 = sum(abs(p_doppler_data.iq_b_data_CR).^2, 3) / 8;
-p_doppler_2 = abs(p_doppler_2);
-p_doppler_data.P_db_2 = 20*log10(p_doppler_2/max(p_doppler_2(:)));
-imagesc(sca.x_grid*1000, sca.y_grid*1000, p_doppler_data.P_db_2);
-clim([-80, 0])
-colorbar;
-colormap('hot');
-axis equal ij tight
-title('CR');
-xlabel('lateral (mm)');
-ylabel('depth (mm)');
+A = velocity_data.velocity_doppler.RC(:, :, 1);
+B = velocity_data.velocity_doppler.CR(:, :, 1);
+C = velocity_data.V_data.RC(:, :, 1);
+D = velocity_data.V_data.RC(:, :, 2);
+E = velocity_data.V_data.CR(:, :, 1);
+F = velocity_data.V_data.CR(:, :, 2);
+G = velocity_data.V_data_mbp.v_x;
+H = velocity_data.V_data_mbp.v_y;
+I = velocity_data.V_data_mbp.v_z_RC;
+J = velocity_data.V_data_mbp.v_z_CR;

@@ -100,9 +100,9 @@ delay_times = zeros(wave.N_theta, 1);
 trans_apo = apodization(rca_probe.N_RC);
 trans_apo.apodization_type = 'hanning';
 % 计算
-disp('计算RF数据');
+% disp('计算RF数据');
 for n = 1:wave.N_theta
-    disp(['计算第', num2str(n), '个角度（一共', num2str(wave.N_theta), '个）']);
+    % disp(['计算第', num2str(n), '个角度（一共', num2str(wave.N_theta), '个）']);
 
     % 发射孔径
     emit_delay = delay_calc_rca(Th_x_ele, Th_y_ele, wave, global_para.c0, n, rca_probe);

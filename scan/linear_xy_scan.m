@@ -56,6 +56,40 @@ classdef linear_xy_scan < scan
             xlabel('x (mm)');
             ylabel('y (mm)');
         end
+        function doppler_figure = plot_doppler(sca_xy, figure_handle, data, min_p_db)
+            doppler_figure = figure_handle;
+            sub_1 = subplot(131);
+            imagesc(sca_xy.x_grid*1000, sca_xy.y_grid*1000, data.velocity);
+            colorbar;
+            colormap(sub_1, dopplermap);
+            clim([-1 1]*max(abs(data.velocity(:))));
+            axis equal ij tight
+            title('Color Doppler');
+            xlabel('lateral (mm)');
+            ylabel('depth (mm)');
+            
+            sub_2 = subplot(132);
+            imagesc(sca_xy.x_grid*1000, sca_xy.y_grid*1000, data.P_db);
+            clim([min_p_db 0]);
+            colorbar;
+            colormap(sub_2, hot);
+            axis equal ij tight
+            title('Power Doppler');
+            xlabel('lateral (mm)');
+            ylabel('depth (mm)');
+            
+            idx = data.P_db > min_p_db;
+            Vd = data.velocity.*idx;
+            sub_3 = subplot(133);
+            imagesc(sca_xy.x_grid*1000, sca_xy.y_grid*1000, Vd);
+            colorbar;
+            colormap(sub_3, dopplermap);
+            clim([-1 1]*max(abs(data.velocity(:))));
+            axis equal ij tight
+            title('Color Doppler (mask by Power Doppler)');
+            xlabel('lateral (mm)');
+            ylabel('depth (mm)');
+        end
     end
    
 end

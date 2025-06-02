@@ -104,6 +104,17 @@ classdef linear_3d_scan < scan
             xlabel('lateral (mm)');
             ylabel('depth (mm)');
         end
+        function p_doppler_figure = plot_p_doppler(sca_3d, figure_handle, data, min_p_db)
+            p_doppler_figure = figure_handle;
+            imagesc(sca_3d.lateral_grid*1000, sca_3d.axial_grid*1000, data);
+            clim([min_p_db, 0])
+            colorbar;
+            colormap('hot');
+            axis equal ij tight
+            title('XDoppler');
+            xlabel('lateral (mm)');
+            ylabel('depth (mm)');
+        end
     end
 end
 
