@@ -351,6 +351,7 @@ classdef rca_array < probe
             end
             velocity_data.V_data = V_data;
             % ------------------------------功率多普勒掩码------------------------------
+            disp('计算功率多普勒');
             data4p_RC = zeros(scan.ori_shape(1), scan.ori_shape(2), N_frame);
             data4p_CR = zeros(scan.ori_shape(1), scan.ori_shape(2), N_frame);
             for n = 1:size(UVD_blocks, 1)
@@ -364,11 +365,6 @@ classdef rca_array < probe
             p_doppler = sum(data4p_RC.*conj(data4p_CR)+conj(data4p_RC).*data4p_CR, 3) / N_frame;
             p_doppler = abs(p_doppler);
             velocity_data.P_db = 20 * log10(p_doppler/max(p_doppler(:)));
-            idx = velocity_data.P_db > min_p_db;
-            velocity_data.V_data_mbp.v_z_RC = V_data.RC(:, :, 1) .* idx;
-            velocity_data.V_data_mbp.v_x = V_data.RC(:, :, 2) .* idx;
-            velocity_data.V_data_mbp.v_z_CR = V_data.CR(:, :, 1) .* idx;
-            velocity_data.V_data_mbp.v_y = V_data.CR(:, :, 2) .* idx;
         end
     end
 end

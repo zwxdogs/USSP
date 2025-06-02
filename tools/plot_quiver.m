@@ -1,17 +1,16 @@
-function [] = plot_quiver(X, Y, U, V)
+function [] = plot_quiver(X, Y, U, V, scale, color, figure_title)
 
 % 绘图
 M = sqrt(U.^2+V.^2); % 计算模量
-colorlist = jet; % 加载色条，也可以更换别的，cool ,winter等
+colorlist = color; % 加载色条，也可以更换别的，cool ,winter等
 M_min = min(M(:));
 M_max = max(M(:));
 Mlist = linspace(M_min, M_max, 256);
 scaler1 = M_max ./ M; % 长度调节因子
 U = U .* scaler1; % 每个分量进行调节
 V = V .* scaler1; % 每个分量进行调节
-scaler2 = 2; % 重新调节长度 以适应绘图
-U = U * scaler2;
-V = V * scaler2; 
+U = U * scale;
+V = V * scale; 
 [m, n] = size(X);
 for i = 1:m
     for j = 1:n
@@ -25,10 +24,11 @@ for i = 1:m
     end
 end
 hc = colorbar;
-colormap(jet)
+colormap(color)
 hc.TickLabels = linspace(M_min, M_max, 11);
 axis equal ij tight
 xlabel('lateral (mm)');
 ylabel('depth (mm)');
+title(figure_title);
 
 end
