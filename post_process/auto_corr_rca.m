@@ -32,9 +32,10 @@ for w = 1:wave.N_theta
         AC_CR = imfilter(AC_CR, h, 'replicate');
     end
     % 计算多普勒速度
-    VN = global_para.c0 * global_para.PRF / (4 * rca.f0 * lag);
-    velocity_RC = -VN * imag(log(AC_RC)) / pi;
-    velocity_CR = -VN * imag(log(AC_CR)) / pi;
+    PRF_eff = global_para.PRF / (wave.N_theta * 2);
+    VN = global_para.c0 * PRF_eff / (4 * rca.f0 * lag);
+    velocity_RC = VN * angle(AC_RC) / pi;
+    velocity_CR = VN * angle(AC_CR) / pi;
     velocity_doppler.RC(:, :, w) = velocity_RC;
     velocity_doppler.CR(:, :, w) = velocity_CR;
 

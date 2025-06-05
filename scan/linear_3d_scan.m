@@ -125,12 +125,12 @@ classdef linear_3d_scan < scan
             v_y = data.V_data.CR(:, :, 2) .* idx;
             % ------------------------------绘制矢量图------------------------------
             [lateral, axial] = meshgrid(sca_3d.lateral_grid(1:sample:end), sca_3d.axial_grid(1:sample:end));
-            subplot(121);
+            % subplot(121);
             plot_quiver(lateral*1000, axial*1000, v_x((1:sample:end), (1:sample:end)), ...
                 v_z_RC((1:sample:end), (1:sample:end)), scale, color, 'RC');
-            subplot(122);
-            plot_quiver(lateral*1000, axial*1000, v_y((1:sample:end), (1:sample:end)), ...
-                v_z_CR((1:sample:end), (1:sample:end)), scale, color, 'CR');
+            % subplot(122);
+            % plot_quiver(lateral*1000, axial*1000, v_y((1:sample:end), (1:sample:end)), ...
+            %     v_z_CR((1:sample:end), (1:sample:end)), scale, color, 'CR');
         end
     end
 end
