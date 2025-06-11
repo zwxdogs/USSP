@@ -319,35 +319,6 @@ classdef rca_array < probe
             velocity_data.UVD_blocks = UVD_blocks;
             % ------------------------------SVD滤波------------------------------
             % 暂不考虑SVD滤波，需要去除低频静态数据时考虑。
-
-            % ------------------------------自相关算法------------------------------
-            velocity_doppler = auto_corr_rca(rca, UVD_blocks, N_frame, global_para, scan, wave, lag, M);
-            velocity_data.velocity_doppler = velocity_doppler;
-            % ------------------------------最小二乘法------------------------------
-            disp('最小二乘法求速度矢量');
-            % RC
-            theta_mat = [cos(wave.theta') + 1, sin(wave.theta')];
-            V_data.RC = zeros(scan.ori_shape(1), scan.ori_shape(2), 2);
-            for i = 1:scan.ori_shape(1)
-                for j = 1:scan.ori_shape(2)
-                    d_v_mat_RC = reshape(velocity_doppler.RC(i, j, :), [wave.N_theta, 1]) * 2;
-                    % V_RC = lsqnonneg(theta_mat, d_v_mat_RC); % 最小二乘求解
-                    V_RC = pinv(theta_mat) * d_v_mat_RC; % 伪逆法求解
-                    V_data.RC(i, j, :) = V_RC;
-                end
-            end
-            % CR
-            theta_mat = [cos(wave.theta') + 1, sin(wave.theta')];
-            V_data.CR = zeros(scan.ori_shape(1), scan.ori_shape(2), 2);
-            for i = 1:scan.ori_shape(1)
-                for j = 1:scan.ori_shape(2)
-                    d_v_mat_CR = reshape(velocity_doppler.CR(i, j, :), [wave.N_theta, 1]) * 2;
-                    % V_CR = lsqnonneg(theta_mat, d_v_mat_CR); % 最小二乘求解
-                    V_CR = pinv(theta_mat) * d_v_mat_CR; % 伪逆法求解
-                    V_data.CR(i, j, :) = V_CR;
-                end
-            end
-            velocity_data.V_data = V_data;
             % ------------------------------功率多普勒掩码------------------------------
             disp('计算功率多普勒');
             data4p_RC = zeros(scan.ori_shape(1), scan.ori_shape(2), N_frame);

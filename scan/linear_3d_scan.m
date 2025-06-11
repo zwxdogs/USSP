@@ -115,17 +115,26 @@ classdef linear_3d_scan < scan
             xlabel('lateral (mm)');
             ylabel('depth (mm)');
         end
-        function velocity_figure = plot_velocity(sca_3d, figure_handle, data, min_p_db, scale, sample, color)
+        function velocity_figure = plot_velocity(sca_3d, figure_handle, data, p_db, min_p_db, scale, sample, color)
             velocity_figure = figure_handle;
             % ------------------------------功率多普勒掩码------------------------------
-            idx = data.P_db > min_p_db;
-            v_z_RC = data.V_data.RC(:, :, 1) .* idx;
-            v_x = data.V_data.RC(:, :, 2) .* idx;
-            v_z_CR = data.V_data.CR(:, :, 1) .* idx;
-            v_y = data.V_data.CR(:, :, 2) .* idx;
+            ax1 = subplot(121);
+            imagesc(sca_3d.lateral_grid*1000, sca_3d.axial_grid*1000, p_db);
+            clim([min_p_db, 0])
+            colorbar;
+            colormap(ax1, 'hot');
+            axis equal ij tight
+            title('XDoppler');
+            xlabel('lateral (mm)');
+            ylabel('depth (mm)');
             % ------------------------------绘制矢量图------------------------------
+            idx = p_db > min_p_db;
+            v_z_RC = data.RC(:, :, 1) .* idx;
+            v_x = data.RC(:, :, 2) .* idx;
+            v_z_CR = data.CR(:, :, 1) .* idx;
+            v_y = data.CR(:, :, 2) .* idx;
             [lateral, axial] = meshgrid(sca_3d.lateral_grid(1:sample:end), sca_3d.axial_grid(1:sample:end));
-            % subplot(121);
+            ax2 = subplot(122);
             plot_quiver(lateral*1000, axial*1000, v_x((1:sample:end), (1:sample:end)), ...
                 v_z_RC((1:sample:end), (1:sample:end)), scale, color, 'RC');
             % subplot(122);
