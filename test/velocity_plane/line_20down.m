@@ -90,4 +90,4 @@ data_test = test_data(V_data_geo_mask, velocity_data.P_db, min_p_db, sca, v_l*si
 % 保存数据
 file = "line20Down"+ num2str(rca.N_RC) + "_" + num2str(wave.N_theta) + "A_" + num2str(size(pha, 1)) + "F_PRF" + num2str(para.PRF/1000) + ".mat";
 file = "data\" + file;
-save(file, "para", "pha", "rca", "sca", "V_N", "velocity_data", "wave", "data_test");
+save(file, "para", "pha", "rca", "sca", "V_N", "velocity_data", "V_data", "V_data_geo_mask", "wave", "data_test");

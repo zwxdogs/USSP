@@ -93,12 +93,12 @@ classdef linear_3d_scan < scan
             ylabel('depth (mm)');
             
             idx = data.P_db > min_p_db;
-            Vd = data.velocity.*idx;
+            Vd = data.velocity.*idx / sind(40);
             sub_3 = subplot(133);
             imagesc(sca_3d.lateral_grid*1000, sca_3d.axial_grid*1000, Vd);
             colorbar;
             colormap(sub_3, dopplermap);
-            clim([-1 1]*max(abs(data.velocity(:))));
+            clim([-1 1]*max(abs(Vd(:))));
             axis equal ij tight
             title('Color Doppler (mask by Power Doppler)');
             xlabel('lateral (mm)');

@@ -38,9 +38,9 @@ for i = 1:scan.N_pixels
         bia_v_abs = bia_v_abs + (RC_v_abs(i) - v_abs_t);
     end
 end
-test_data.B_v_z = bia_v_z / sum(sum(RC_v_z~=0)) / v_z_t;
-test_data.B_v_x = bia_v_x / sum(sum(RC_v_x~=0)) / v_x_t;
-test_data.B_v_abs = bia_v_abs / sum(sum(RC_v_abs~=0)) / v_abs_t;
+test_data.B_v_z = (bia_v_z / sum(sum(RC_v_z~=0))) / v_z_t;
+test_data.B_v_x = (bia_v_x / sum(sum(RC_v_x~=0))) / v_x_t;
+test_data.B_v_abs = (bia_v_abs / sum(sum(RC_v_abs~=0))) / v_abs_t;
 % SD
 ave_v_z = sum_v_z / sum(sum(RC_v_z~=0));
 ave_v_x = sum_v_x / sum(sum(RC_v_x~=0));
